@@ -9,4 +9,12 @@ public class SceneChanger : MonoBehaviour
     {
         SceneManager.LoadScene(sceneName);
     }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Return)) // KeyCode.Return representa la tecla Enter
+        {
+            LoadScene(); // Llama al método LoadScene() si se presiona Enter
+        }
+    }
 }
