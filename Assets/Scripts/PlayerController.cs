@@ -4,119 +4,116 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-   private Rigidbody2D _rb; // Componente Rigidbody2D del jugador para controlar su física.
+    private Rigidbody2D rb; // Componente Rigidbody2D del jugador.
 
-    // RUN 
-    public float speed; // Velocidad de movimiento lateral del jugador.
-    private float moveInput; // Entrada del usuario para el movimiento horizontal.
+    // RUN
+    public float moveSpeed = 5f; // Velocidad de movimiento lateral del jugador.
+    private float horizontalInput; // Entrada del usuario para el movimiento horizontal.
 
-    // JUMP 
-    public float jumpForce; // Fuerza del salto del jugador.
+    // JUMP
+    public float jumpForce = 10f; // Fuerza del salto.
+    public int maxJumps = 2; // Máximo número de saltos permitidos.
+    public float jumpHoldTime = 0.2f; // Tiempo que puede mantener el salto.
+    private int currentJumpCount; // Contador de saltos realizados.
+    private float jumpTimer; // Temporizador para mantener el salto.
     private bool isJumping; // Indica si el jugador está en medio de un salto.
-    public float jumpTime; // Duración máxima del salto continuo.
-    private float jumpTimeCounter; // Temporizador para medir el tiempo restante del salto.
-    public float checkRadius; // Radio para verificar si el jugador está tocando el suelo.
-    public Transform feetPos; // Posición de los pies del jugador para la verificación de suelo.
-    public LayerMask whatIsGround; // Capa que define qué se considera suelo.
-    public int maxJumps = 3; // Número máximo de saltos (puedes ajustarlo según lo que necesites).
-    private int currentJumps; // Contador de saltos realizados actualmente.
-    public int jumpCount;
+
+    // Settings
+    public Transform groundCheck; // Transform para detectar el suelo.
+    public float groundCheckRadius = 0.2f; // Radio para detectar el suelo.
+    public LayerMask groundLayer; // Capa que define qué es considerado suelo.
+    private bool isGrounded; // Indica si el jugador está tocando el suelo.
 
     void Start()
     {
-        _rb = GetComponent<Rigidbody2D>(); // Asigna el componente Rigidbody2D.
+        rb = GetComponent<Rigidbody2D>();
     }
 
     void Update()
     {
-        Jump();
+        CheckGround(); // Verifica si el jugador está en el suelo.
+        HandleJumpInput(); // Maneja la lógica del salto.
     }
 
-    private void FixedUpdate()
+    void FixedUpdate()
     {
-        Run(); 
+        Move(); // Maneja el movimiento horizontal.
     }
 
-    // Método para manejar el movimiento lateral del jugador.
-    private void Run()
+    /// Maneja el movimiento horizontal del jugador.
+    private void Move()
     {
-        moveInput = Input.GetAxisRaw("Horizontal"); // Obtiene la entrada horizontal del usuario.
-        _rb.linearVelocity = new Vector2(moveInput * speed, _rb.linearVelocity.y); // Aplica la velocidad en la dirección horizontal.
+        horizontalInput = Input.GetAxisRaw("Horizontal");
+        rb.linearVelocity = new Vector2(horizontalInput * moveSpeed, rb.linearVelocity.y);
 
-        // Cambia la dirección del sprite según la dirección del movimiento.
-        if (moveInput < 0)
+        // Cambiar la dirección del sprite según la entrada.
+        if (horizontalInput < 0)
         {
-            transform.eulerAngles = new Vector3(0, 180f, 0);
-            // Debug.Log("Izquierda");
+            transform.eulerAngles = new Vector3(0, 180, 0);
         }
-        else if (moveInput > 0)
+        else if (horizontalInput > 0)
         {
-            transform.eulerAngles = new Vector3(0, 0f, 0);
-            // Debug.Log("Derecha");
-        }
-    }
-
-
-    // Método para verificar si el jugador está tocando el suelo.
-    private bool isGrounded()
-    {
-        return Physics2D.OverlapCircle(feetPos.position, checkRadius, whatIsGround);
-    }
-
-    // Restablecer el contador de saltos cuando el jugador toca el suelo.
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.collider.CompareTag("isGround") || collision.collider.CompareTag("Ground"))
-        {
-            jumpCount = 0; // Permite el salto normal nuevamente.
-            // Debug.Log("El jugador está en el suelo, puede saltar de nuevo.");
+            transform.eulerAngles = new Vector3(0, 0, 0);
         }
     }
 
-
-  private void Jump()
+    /// Detecta si el jugador está tocando el suelo.
+    private void CheckGround()
     {
-        // Saltar si el jugador está en el suelo y presiona la tecla de salto (Primer salto).
-        if (isGrounded() && Input.GetKeyDown(KeyCode.W) && currentJumps < maxJumps)
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+
+        // Reinicia el contador de saltos al tocar el suelo.
+        if (isGrounded)
         {
-            Debug.Log("Está saltando");
+            currentJumpCount = 0;
+            isJumping = false;
+        }
+    }
+
+    /// Maneja la lógica de entrada y el salto del jugador.
+    private void HandleJumpInput()
+    {
+        // Inicia un salto si el jugador está en el suelo o tiene saltos restantes.
+        if (Input.GetKeyDown(KeyCode.W) && (isGrounded || currentJumpCount < maxJumps))
+        {
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
             isJumping = true;
-            _rb.linearVelocity = Vector2.up * jumpForce; // Aplica la fuerza hacia arriba para el salto
-            jumpTimeCounter = jumpTime; // Reinicia el temporizador de salto
-            currentJumps++; // Incrementa el contador de saltos
+            jumpTimer = jumpHoldTime;
+            currentJumpCount++;
         }
 
-        // Saltar mientras está en el aire (Doble salto, Triple salto, etc.)
-        else if (Input.GetKeyDown(KeyCode.W) && currentJumps > 0 && currentJumps < maxJumps)
-        {
-            Debug.Log("Está realizando un salto adicional");
-            _rb.linearVelocity = Vector2.up * jumpForce; // Aplica la fuerza para el salto adicional
-            currentJumps++; // Incrementa el contador de saltos
-        }
-
-        // Mantiene el salto si la tecla se mantiene presionada y hay tiempo de salto restante.
+        // Mantiene el salto mientras la tecla esté presionada y haya tiempo restante.
         if (Input.GetKey(KeyCode.W) && isJumping)
         {
-            Debug.Log("Está saltando");
-            if (jumpTimeCounter > 0)
+            if (jumpTimer > 0)
             {
-                _rb.linearVelocity = Vector2.up * jumpForce; // Aplica fuerza continua hacia arriba.
-                jumpTimeCounter -= Time.deltaTime; // Reduce el tiempo restante del salto.
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+                jumpTimer -= Time.deltaTime;
             }
             else
             {
-                isJumping = false; // Finaliza el salto si se agota el tiempo.
+                isJumping = false;
             }
         }
 
-        // Finaliza el salto si el jugador suelta la tecla de salto.
+        // Finaliza el salto cuando se suelta la tecla.
         if (Input.GetKeyUp(KeyCode.W))
         {
             isJumping = false;
-            // Debug.Log("Ya no salta");
+        }
+    }
+
+    // Dibuja un gizmo para visualizar el área de detección del suelo en la escena.
+    private void OnDrawGizmos()
+    {
+        if (groundCheck != null)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
         }
     }
 }
+
 
 
 
