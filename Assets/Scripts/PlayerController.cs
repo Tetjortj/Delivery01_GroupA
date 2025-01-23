@@ -4,116 +4,108 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    private Rigidbody2D rb; // Componente Rigidbody2D del jugador.
+  private Rigidbody2D _rb;
 
-    // RUN
-    public float moveSpeed = 5f; // Velocidad de movimiento lateral del jugador.
-    private float horizontalInput; // Entrada del usuario para el movimiento horizontal.
+  // RUN 
+  public float speed; 
+  private float moveInput; 
 
-    // JUMP
-    public float jumpForce = 10f; // Fuerza del salto.
-    public int maxJumps = 2; // Máximo número de saltos permitidos.
-    public float jumpHoldTime = 0.2f; // Tiempo que puede mantener el salto.
-    private int currentJumpCount; // Contador de saltos realizados.
-    private float jumpTimer; // Temporizador para mantener el salto.
-    private bool isJumping; // Indica si el jugador está en medio de un salto.
+  // JUMP 
+  public float jumpForce; 
+  private bool isJumping; 
+  public float jumpTime; 
+  private float jumpTimeCounter;
+  public float checkRadius; 
+  public Transform feetPos; 
+  public LayerMask whatIsGround; 
 
-    // Settings
-    public Transform groundCheck; // Transform para detectar el suelo.
-    public float groundCheckRadius = 0.2f; // Radio para detectar el suelo.
-    public LayerMask groundLayer; // Capa que define qué es considerado suelo.
-    private bool isGrounded; // Indica si el jugador está tocando el suelo.
+  // DOUBLE JUMP
+  private bool canDoubleJump; 
 
-    void Start()
+  void Start()
+  {
+    _rb = GetComponent<Rigidbody2D>();
+  }
+
+  void Update()
+  {
+    HandleJump();
+  }
+
+  private void FixedUpdate()
+  {
+    HandleRun(); 
+  }
+
+    private void HandleRun()
     {
-        rb = GetComponent<Rigidbody2D>();
-    }
+        moveInput = Input.GetAxisRaw("Horizontal"); 
+        _rb.linearVelocity = new Vector2(moveInput * speed, _rb.linearVelocity.y); 
 
-    void Update()
-    {
-        CheckGround(); // Verifica si el jugador está en el suelo.
-        HandleJumpInput(); // Maneja la lógica del salto.
-    }
-
-    void FixedUpdate()
-    {
-        Move(); // Maneja el movimiento horizontal.
-    }
-
-    /// Maneja el movimiento horizontal del jugador.
-    private void Move()
-    {
-        horizontalInput = Input.GetAxisRaw("Horizontal");
-        rb.linearVelocity = new Vector2(horizontalInput * moveSpeed, rb.linearVelocity.y);
-
-        // Cambiar la dirección del sprite según la entrada.
-        if (horizontalInput < 0)
+        // Ajustar rotación del personaje según dirección.
+        if (moveInput != 0)
         {
-            transform.eulerAngles = new Vector3(0, 180, 0);
-        }
-        else if (horizontalInput > 0)
-        {
-            transform.eulerAngles = new Vector3(0, 0, 0);
+            transform.eulerAngles = moveInput < 0 ? new Vector3(0, 180f, 0) : Vector3.zero;
         }
     }
 
-    /// Detecta si el jugador está tocando el suelo.
-    private void CheckGround()
+    private bool IsGrounded()
     {
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
-
-        // Reinicia el contador de saltos al tocar el suelo.
-        if (isGrounded)
-        {
-            currentJumpCount = 0;
-            isJumping = false;
-        }
+        return Physics2D.OverlapCircle(feetPos.position, checkRadius, whatIsGround);
     }
 
-    /// Maneja la lógica de entrada y el salto del jugador.
-    private void HandleJumpInput()
+    private void HandleJump()
     {
-        // Inicia un salto si el jugador está en el suelo o tiene saltos restantes.
-        if (Input.GetKeyDown(KeyCode.W) && (isGrounded || currentJumpCount < maxJumps))
+        // Si el jugador está en el suelo, puede reiniciar el salto y el doble salto.
+        if (IsGrounded())
         {
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
-            isJumping = true;
-            jumpTimer = jumpHoldTime;
-            currentJumpCount++;
+            canDoubleJump = true;
+
+            if (Input.GetKeyDown(KeyCode.W))
+            {
+                StartJump();
+            }
         }
 
-        // Mantiene el salto mientras la tecla esté presionada y haya tiempo restante.
+        // Control del salto inicial o doble salto prolongado.
         if (Input.GetKey(KeyCode.W) && isJumping)
         {
-            if (jumpTimer > 0)
-            {
-                rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
-                jumpTimer -= Time.deltaTime;
-            }
-            else
-            {
-                isJumping = false;
-            }
+            ContinueJump();
         }
 
-        // Finaliza el salto cuando se suelta la tecla.
         if (Input.GetKeyUp(KeyCode.W))
         {
             isJumping = false;
         }
+
+        // Si no está en el suelo y puede hacer doble salto, lo realiza.
+        if (canDoubleJump && !IsGrounded() && Input.GetKeyDown(KeyCode.W))
+        {
+            canDoubleJump = false;
+            StartJump();
+        }
     }
 
-    // Dibuja un gizmo para visualizar el área de detección del suelo en la escena.
-    private void OnDrawGizmos()
+    private void StartJump()
     {
-        if (groundCheck != null)
+        isJumping = true;
+        jumpTimeCounter = jumpTime;
+        _rb.linearVelocity = Vector2.up * jumpForce;
+    }
+
+    private void ContinueJump()
+    {
+        if (jumpTimeCounter > 0)
         {
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
+            _rb.linearVelocity = Vector2.up * jumpForce;
+            jumpTimeCounter -= Time.deltaTime;
+        }
+        else
+        {
+            isJumping = false;
         }
     }
 }
-
 
 
 
