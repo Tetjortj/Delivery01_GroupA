@@ -2321,7 +2321,7 @@ Canvas:
   m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 0
+  m_SortingLayerID: -1433122593
   m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!224 &1171093572
@@ -3290,6 +3290,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1171093572}
     m_Modifications:
+    - target: {fileID: 6772422471410656688, guid: 7bed081d3b007ea4d93a0678b5611c2e,
+        type: 3}
+      propertyPath: m_FontData.m_MaxSize
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 6772422471410656688, guid: 7bed081d3b007ea4d93a0678b5611c2e,
+        type: 3}
+      propertyPath: m_FontData.m_MinSize
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6772422471410656688, guid: 7bed081d3b007ea4d93a0678b5611c2e,
+        type: 3}
+      propertyPath: m_FontData.m_FontSize
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 7655139928369123158, guid: 7bed081d3b007ea4d93a0678b5611c2e,
         type: 3}
       propertyPath: m_Name
@@ -3328,12 +3343,12 @@ PrefabInstance:
     - target: {fileID: 8641684600491419234, guid: 7bed081d3b007ea4d93a0678b5611c2e,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 299.11
+      value: 811.32
       objectReference: {fileID: 0}
     - target: {fileID: 8641684600491419234, guid: 7bed081d3b007ea4d93a0678b5611c2e,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 48.55
+      value: 97.69
       objectReference: {fileID: 0}
     - target: {fileID: 8641684600491419234, guid: 7bed081d3b007ea4d93a0678b5611c2e,
         type: 3}
@@ -3373,12 +3388,12 @@ PrefabInstance:
     - target: {fileID: 8641684600491419234, guid: 7bed081d3b007ea4d93a0678b5611c2e,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 425
+      value: -829.89
       objectReference: {fileID: 0}
     - target: {fileID: 8641684600491419234, guid: 7bed081d3b007ea4d93a0678b5611c2e,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 365
+      value: 654
       objectReference: {fileID: 0}
     - target: {fileID: 8641684600491419234, guid: 7bed081d3b007ea4d93a0678b5611c2e,
         type: 3}
