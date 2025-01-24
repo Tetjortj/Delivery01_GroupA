@@ -45,7 +45,7 @@ public class PlayerController : MonoBehaviour
         // Ajustar rotación del personaje según dirección.
         if (moveInput != 0)
         {
-            transform.eulerAngles = moveInput < 0 ? new Vector3(0, 180f, 0) : Vector3.zero;
+            transform.eulerAngles = moveInput > 0 ? new Vector3(0, 180f, 0) : Vector3.zero;
         }
     }
 
