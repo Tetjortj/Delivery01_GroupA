@@ -7,7 +7,7 @@ using UnityEngine.Events;
 
 public class Coin : MonoBehaviour
 {
-    public int value = 5;
+    public int value;
     public static Action<Coin> OnCollisionCoin;
 
     public void OnTriggerEnter2D(Collider2D other) {

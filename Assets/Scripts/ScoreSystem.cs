@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class ScoreSystem : MonoBehaviour
 {
-    public int Score;
+    public int score;
     public static Action<int> OnScoreUpdated;
 
     private void OnEnable() {
@@ -16,8 +16,8 @@ public class ScoreSystem : MonoBehaviour
     }
 
     private void UpdateScore(Coin coin) {
-        Score += coin.value;
-        OnScoreUpdated?.Invoke(Score);
+        score += coin.value;
+        OnScoreUpdated?.Invoke(score);
     }
 }
 

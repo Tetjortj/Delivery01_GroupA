@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4983557394316038722}
   - component: {fileID: 6715757307451738763}
   - component: {fileID: 646394584091959212}
-  - component: {fileID: 2988272238278354681}
+  - component: {fileID: 6902753515439235035}
   m_Layer: 0
   m_Name: GoldCoin
   m_TagString: Untagged
@@ -135,7 +135,7 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.5, y: 0.5}
   m_EdgeRadius: 0
---- !u!114 &2988272238278354681
+--- !u!114 &6902753515439235035
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -144,7 +144,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1621519302034352042}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35e37435cecd23241896a6c84fce7239, type: 3}
+  m_Script: {fileID: 11500000, guid: 1cef24954ecc8944bb568db9077f91d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  coinValue: 20
+  value: 20

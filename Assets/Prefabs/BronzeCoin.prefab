@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6170740072802685842}
   - component: {fileID: 6336920502075394435}
   - component: {fileID: 793396636618982520}
-  - component: {fileID: 8072501906417532131}
+  - component: {fileID: 2853837602737069652}
   m_Layer: 0
   m_Name: BronzeCoin
   m_TagString: Untagged
@@ -135,7 +135,7 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.5, y: 0.5}
   m_EdgeRadius: 0
---- !u!114 &8072501906417532131
+--- !u!114 &2853837602737069652
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -144,7 +144,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8636519961742804676}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35e37435cecd23241896a6c84fce7239, type: 3}
+  m_Script: {fileID: 11500000, guid: 1cef24954ecc8944bb568db9077f91d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  coinValue: 5
+  value: 5
