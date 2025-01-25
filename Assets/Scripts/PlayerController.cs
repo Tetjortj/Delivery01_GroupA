@@ -4,38 +4,47 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-  private Rigidbody2D _rb;
+    private Rigidbody2D _rb;
+    private Animator _anim;
 
-  // RUN 
-  public float speed; 
-  private float moveInput; 
+    // RUN 
+    public float speed; 
+    private float moveInput; 
 
-  // JUMP 
-  public float jumpForce; 
-  private bool isJumping; 
-  public float jumpTime; 
-  private float jumpTimeCounter;
-  public float checkRadius; 
-  public Transform feetPos; 
-  public LayerMask whatIsGround; 
+    // JUMP 
+    public float jumpForce; 
+    private bool isJumping; 
+    public float jumpTime; 
+    private float jumpTimeCounter;
+    public float checkRadius; 
+    public Transform feetPos; 
+    public LayerMask whatIsGround; 
 
-  // DOUBLE JUMP
-  private bool canDoubleJump; 
+    // DOUBLE JUMP
+    private bool canDoubleJump; 
 
-  void Start()
-  {
-    _rb = GetComponent<Rigidbody2D>();
-  }
+    //CODE
+    void Start()
+    {
+        _rb = GetComponent<Rigidbody2D>();
+        _anim = GetComponent<Animator>();
+    }
 
-  void Update()
-  {
-    HandleJump();
-  }
+    void Update()
+    {
+        HandleJump();
+    }
 
-  private void FixedUpdate()
-  {
-    HandleRun(); 
-  }
+    private void FixedUpdate()
+    {
+        HandleRun(); 
+    }
+
+    // METODOS REUTILIZABLES 
+    private bool IsGrounded()
+    {
+        return Physics2D.OverlapCircle(feetPos.position, checkRadius, whatIsGround);
+    }
 
     private void HandleRun()
     {
@@ -45,17 +54,20 @@ public class PlayerController : MonoBehaviour
         // Ajustar rotación del personaje según dirección.
         if (moveInput != 0)
         {
-            transform.eulerAngles = moveInput > 0 ? new Vector3(0, 180f, 0) : Vector3.zero;
+            transform.eulerAngles = moveInput > 0 ? Vector3.zero : new Vector3(0, 180f, 0);
         }
-    }
-
-    private bool IsGrounded()
-    {
-        return Physics2D.OverlapCircle(feetPos.position, checkRadius, whatIsGround);
+        if (moveInput != 0 && IsGrounded()) {
+            _anim.SetBool("isRunning", true);
+        } else {
+            _anim.SetBool("isRunning", false);
+        }
     }
 
     private void HandleJump()
     {
+        _anim.SetBool("isJump", !IsGrounded());
+        _anim.SetFloat("YVelocity", _rb.linearVelocity.y);
+
         // Si el jugador está en el suelo, puede reiniciar el salto y el doble salto.
         if (IsGrounded())
         {
