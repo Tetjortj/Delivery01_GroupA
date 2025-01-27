@@ -26,6 +26,5 @@ public class SceneChanger : MonoBehaviour
     private void ExitGame()
     {
         Application.Quit();
-        Debug.Log("Juego cerrado");
     }
 }

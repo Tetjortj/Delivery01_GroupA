@@ -53,7 +53,6 @@ public class PlayerController : MonoBehaviour
         float rayDistance = 0.5f;
         Vector2 origin = transform.position;
 
-        // Rayos laterales desde diferentes puntos del personaje
         bool isTouchingRight = Physics2D.Raycast(origin, Vector2.right, rayDistance, whatIsWall) ||
                                Physics2D.Raycast(origin + Vector2.up * 0.5f, Vector2.right, rayDistance, whatIsWall) ||
                                Physics2D.Raycast(origin + Vector2.down * 0.5f, Vector2.right, rayDistance, whatIsWall);
