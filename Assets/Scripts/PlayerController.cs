@@ -18,7 +18,9 @@ public class PlayerController : MonoBehaviour
     private float jumpTimeCounter;
     public float checkRadius; 
     public Transform feetPos; 
-    public LayerMask whatIsGround; 
+    public LayerMask whatIsGround;
+    public LayerMask whatIsWall;
+
 
     // DOUBLE JUMP
     private bool canDoubleJump; 
@@ -46,10 +48,66 @@ public class PlayerController : MonoBehaviour
         return Physics2D.OverlapCircle(feetPos.position, checkRadius, whatIsGround);
     }
 
+    private bool IsTouchingWall()
+    {
+        float rayDistance = 0.5f;
+        Vector2 origin = transform.position;
+
+        // Rayos laterales desde diferentes puntos del personaje
+        bool isTouchingRight = Physics2D.Raycast(origin, Vector2.right, rayDistance, whatIsWall) ||
+                               Physics2D.Raycast(origin + Vector2.up * 0.5f, Vector2.right, rayDistance, whatIsWall) ||
+                               Physics2D.Raycast(origin + Vector2.down * 0.5f, Vector2.right, rayDistance, whatIsWall);
+
+        bool isTouchingLeft = Physics2D.Raycast(origin, Vector2.left, rayDistance, whatIsWall) ||
+                              Physics2D.Raycast(origin + Vector2.up * 0.5f, Vector2.left, rayDistance, whatIsWall) ||
+                              Physics2D.Raycast(origin + Vector2.down * 0.5f, Vector2.left, rayDistance, whatIsWall);
+
+        // Dibuja los rayos para depuración
+        Debug.DrawRay(origin, Vector2.right * rayDistance, Color.red);
+        Debug.DrawRay(origin + Vector2.up * 0.5f, Vector2.right * rayDistance, Color.red);
+        Debug.DrawRay(origin + Vector2.down * 0.5f, Vector2.right * rayDistance, Color.red);
+
+        Debug.DrawRay(origin, Vector2.left * rayDistance, Color.blue);
+        Debug.DrawRay(origin + Vector2.up * 0.5f, Vector2.left * rayDistance, Color.blue);
+        Debug.DrawRay(origin + Vector2.down * 0.5f, Vector2.left * rayDistance, Color.blue);
+
+        return isTouchingRight || isTouchingLeft;
+    }
+
+
+    private bool IsTouchingWallOnRight()
+    {
+        // Lanza un Raycast hacia la derecha
+        Vector2 origin = transform.position;
+        float rayDistance = 0.5f;
+        return Physics2D.Raycast(origin, Vector2.right, rayDistance, whatIsWall);
+    }
+
+    private bool IsTouchingWallOnLeft()
+    {
+        // Lanza un Raycast hacia la izquierda
+        Vector2 origin = transform.position;
+        float rayDistance = 0.5f;
+        return Physics2D.Raycast(origin, Vector2.left, rayDistance, whatIsWall);
+    }
+
     private void HandleRun()
     {
         moveInput = Input.GetAxisRaw("Horizontal"); 
-        _rb.linearVelocity = new Vector2(moveInput * speed, _rb.linearVelocity.y); 
+        _rb.linearVelocity = new Vector2(moveInput * speed, _rb.linearVelocity.y);
+
+        // Detecta si el personaje está tocando una pared
+        if (IsTouchingWall() && !IsGrounded())
+        {
+            // Si el personaje está tocando una pared y moviéndose hacia ella, cancela el movimiento
+            if ((moveInput > 0 && IsTouchingWallOnRight()) || (moveInput < 0 && IsTouchingWallOnLeft()))
+            {
+                moveInput = 0; // Anula el movimiento hacia la pared
+            }
+        }
+
+        // Aplica la velocidad al personaje
+        _rb.linearVelocity = new Vector2(moveInput * speed, _rb.linearVelocity.y);
 
         // Ajustar rotación del personaje según dirección.
         if (moveInput != 0)
