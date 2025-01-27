@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 
 public class SceneChanger : MonoBehaviour
 {
-    public string sceneName; // Campo para definir el nombre de la escena desde el Inspector
+    public string sceneName;
 
     public void LoadScene()
     {
@@ -12,9 +12,9 @@ public class SceneChanger : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Return)) // KeyCode.Return representa la tecla Enter
+        if (Input.GetKeyDown(KeyCode.Return))
         {
-            LoadScene(); // Llama al método LoadScene() si se presiona Enter
+            LoadScene();
         }
     }
 }
