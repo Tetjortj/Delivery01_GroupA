@@ -73,7 +73,7 @@ public class PlayerController : MonoBehaviour
         {
             canDoubleJump = true;
 
-            if (Input.GetKeyDown(KeyCode.W)||Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.W)||Input.GetKeyDown(KeyCode.Space)||Input.GetKeyDown(KeyCode.UpArrow))
             {
                 StartJump();
             }
@@ -81,18 +81,18 @@ public class PlayerController : MonoBehaviour
         }
 
         // Control del salto inicial o doble salto prolongado.
-        if ((Input.GetKey(KeyCode.W)||Input.GetKey(KeyCode.Space)) && isJumping)
+        if ((Input.GetKey(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKey(KeyCode.Space)) && isJumping)
         {
             ContinueJump();
         }
 
-        if (Input.GetKeyUp(KeyCode.W)||Input.GetKeyUp(KeyCode.Space))
+        if (Input.GetKeyUp(KeyCode.W)||Input.GetKeyUp(KeyCode.Space)||Input.GetKeyDown(KeyCode.UpArrow))
         {
             isJumping = false;
         }
 
         // Si no está en el suelo y puede hacer doble salto, lo realiza.
-        if (canDoubleJump && !IsGrounded() && (Input.GetKeyDown(KeyCode.W)|| Input.GetKeyDown(KeyCode.Space)))
+        if (canDoubleJump && !IsGrounded() && (Input.GetKeyDown(KeyCode.W)||Input.GetKeyDown(KeyCode.Space)||Input.GetKeyDown(KeyCode.UpArrow)))
         {
             canDoubleJump = false;
             StartJump();
