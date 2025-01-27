@@ -6,7 +6,7 @@ public class PlayerController : MonoBehaviour
 {
     private Rigidbody2D _rb;
     private Animator _anim;
-
+    
     // RUN 
     public float speed; 
     private float moveInput; 
@@ -23,18 +23,21 @@ public class PlayerController : MonoBehaviour
 
 
     // DOUBLE JUMP
-    private bool canDoubleJump; 
+    private bool canDoubleJump;
 
+   
     //CODE
     void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
         _anim = GetComponent<Animator>();
+       
     }
 
     void Update()
     {
         HandleJump();
+        
     }
 
     private void FixedUpdate()

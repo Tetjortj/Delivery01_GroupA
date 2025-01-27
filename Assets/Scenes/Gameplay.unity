@@ -2493,6 +2493,24 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 5143925578460477448}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1662940752 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6084437117212150232, guid: d69229cb54b3fc9458ccec06b44009dd,
+    type: 3}
+  m_PrefabInstance: {fileID: 6799958780161719499}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1662940753
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1662940752}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3061a8b19ba6da44dad57ea9cc832ab9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1699806054
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3431,6 +3449,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: DeadZone
       objectReference: {fileID: 0}
+    - target: {fileID: 6084437117212150232, guid: d69229cb54b3fc9458ccec06b44009dd,
+        type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     - target: {fileID: 7575189270931534666, guid: d69229cb54b3fc9458ccec06b44009dd,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3485,7 +3508,11 @@ PrefabInstance:
     - {fileID: 3981106868882189588, guid: d69229cb54b3fc9458ccec06b44009dd, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6084437117212150232, guid: d69229cb54b3fc9458ccec06b44009dd,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1662940753}
   m_SourcePrefab: {fileID: 100100000, guid: d69229cb54b3fc9458ccec06b44009dd, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
